@@ -42,7 +42,12 @@ public class Match {
 		buffer.append("\t");
 		buffer.append(homeTeam.toString());
 		buffer.append("\t");
-		buffer.append(result.toString());
+		if(result != null){
+			buffer.append(result.toString());
+		}
+		else{
+			buffer.append("n.n.");	
+		}
 		buffer.append("\t");
 		buffer.append(awayTeam.toString());
 		return buffer.toString();
