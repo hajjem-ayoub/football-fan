@@ -6,8 +6,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +39,14 @@ public class OpenLigaDB extends AbstractStatisticsProvider {
 	
 	@Override
 	public void initialize() throws FileNotFoundException, IOException {
-		request = new HttpGet(ENDPOINT + 1);
+		
+		request = new HttpGet("http://www.openligadb.de/api/getcurrentgroup/bl1");
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpResponse response = httpClient.execute(request);
+		HttpEntity entity = response.getEntity();
+		int groupOrderId = new JSONObject(EntityUtils.toString(entity)).getInt("GroupOrderID");
+		System.out.println("Getting results for group oder id " + groupOrderId);
+		request = new HttpGet(ENDPOINT + groupOrderId);
 	}
 
 	@Override
