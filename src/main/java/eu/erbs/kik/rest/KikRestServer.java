@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.erbs.kik.rest.model.Message;
 
-@Path("/kik/")
+@Path("/")
 public class KikRestServer {
 	
 	private final static Logger logger = LoggerFactory.getLogger(KikRestServer.class);

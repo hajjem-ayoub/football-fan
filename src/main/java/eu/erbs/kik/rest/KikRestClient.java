@@ -2,7 +2,6 @@ package eu.erbs.kik.rest;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +16,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.AbstractHttpMessage;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class KikRestClient {
 	private final static String KIK_CONFIGURATION_URL = "https://api.kik.com/v1/config";
 	private final static String KIK_MESSAGE_URL = "https://api.kik.com/v1/message";
 
-	private final static String WEBHOOK = "http://localhost:8080/FootballFan/kik/message";
+	private final static String WEBHOOK = "http://192.168.0.101:8080/FootballFan/kik/message";
 
 	private final static String KIK_BOT_USERNAME = "KIK_BOT_USERNAME";
 	private final static String KIK_BOT_API_KEY = "KIK_BOT_API_KEY";
@@ -79,8 +79,13 @@ public class KikRestClient {
 
 	private HttpResponse getKikResponse(HttpPost request) throws KikException {
 		try {
-			addAuthentication(request);
+			Properties properties =new Properties();
+			properties.load(new FileReader(new File("src/main/resources/api.properties")));
 
+			request.addHeader(BasicScheme.authenticate(
+					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
+					"UTF-8", false));
+						
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(request);
 
@@ -94,8 +99,13 @@ public class KikRestClient {
 
 	private HttpResponse getKikResponse(HttpGet request) throws KikException {
 		try {
-			addAuthentication(request);
+			Properties properties = new Properties();
+			properties.load(new FileReader(new File("src/main/resources/api.properties")));
 
+			request.addHeader(BasicScheme.authenticate(
+					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
+					"UTF-8", false));
+			
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(request);
 
@@ -122,22 +132,11 @@ public class KikRestClient {
 			ObjectMapper mapper = new ObjectMapper();
 			HttpPost request = new HttpPost(WEBHOOK);
 			logger.info("Messages: " + mapper.writeValueAsString(messages) + " to " + request.getURI());
-			request.setEntity(new StringEntity(mapper.writeValueAsString(messages)));
-
+			StringEntity se = new StringEntity(mapper.writeValueAsString(messages));
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            request.setEntity(se);
+			
 			getKikResponse(request);
-		} catch (IOException e) {
-			throw new KikException(e);
-		}
-	}
-
-	private void addAuthentication(AbstractHttpMessage request) throws KikException {
-		try {
-			Properties properties =new Properties();
-			properties.load(new FileReader(new File("src/main/resources/api.properties")));
-
-			request.addHeader(BasicScheme.authenticate(
-					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
-					"UTF-8", false));
 		} catch (IOException e) {
 			throw new KikException(e);
 		}
@@ -146,8 +145,8 @@ public class KikRestClient {
 	public static void main(String[] args) throws KikException {
 		KikRestClient restClient = new KikRestClient();
 
-		//		restClient.setConfiguration();
-		//		restClient.getConfiguration();
+				restClient.setConfiguration();
+				restClient.getConfiguration();
 
 		Message message = new Message();
 		message.setBody("Test message");
