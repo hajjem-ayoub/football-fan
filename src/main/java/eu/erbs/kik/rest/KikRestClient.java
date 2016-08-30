@@ -85,7 +85,7 @@ public class KikRestClient {
 			request.addHeader(BasicScheme.authenticate(
 					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
 					"UTF-8", false));
-						
+//						
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(request);
 
