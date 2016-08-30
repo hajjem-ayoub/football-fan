@@ -33,8 +33,7 @@ public class KikRestClient {
 	private final static String KIK_CONFIGURATION_URL = "https://api.kik.com/v1/config";
 	private final static String KIK_MESSAGE_URL = "https://api.kik.com/v1/message";
 
-	private final static String WEBHOOK = "http://localhost:8080/FootballFan/rest/message";
-//	https://api.kik.com/v1/message
+	private final static String WEBHOOK = "http://localhost:8080/FootballFan/kik/message";
 
 	private final static String KIK_BOT_USERNAME = "KIK_BOT_USERNAME";
 	private final static String KIK_BOT_API_KEY = "KIK_BOT_API_KEY";
@@ -121,8 +120,8 @@ public class KikRestClient {
 			logger.info("Send " + messages.size() + " messages");
 
 			ObjectMapper mapper = new ObjectMapper();
-			logger.info("Messages: " + mapper.writeValueAsString(messages));
-			HttpPost request = new HttpPost(KIK_MESSAGE_URL);
+			HttpPost request = new HttpPost(WEBHOOK);
+			logger.info("Messages: " + mapper.writeValueAsString(messages) + " to " + request.getURI());
 			request.setEntity(new StringEntity(mapper.writeValueAsString(messages)));
 
 			getKikResponse(request);
@@ -131,21 +130,25 @@ public class KikRestClient {
 		}
 	}
 
-	private void addAuthentication(AbstractHttpMessage request) throws FileNotFoundException, IOException {
-		Properties properties =new Properties();
-		properties.load(new FileReader(new File("src/main/resources/api.properties")));
+	private void addAuthentication(AbstractHttpMessage request) throws KikException {
+		try {
+			Properties properties =new Properties();
+			properties.load(new FileReader(new File("src/main/resources/api.properties")));
 
-		request.addHeader(BasicScheme.authenticate(
-				new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
-				"UTF-8", false));
+			request.addHeader(BasicScheme.authenticate(
+					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
+					"UTF-8", false));
+		} catch (IOException e) {
+			throw new KikException(e);
+		}
 	}
 
 	public static void main(String[] args) throws KikException {
 		KikRestClient restClient = new KikRestClient();
 
-//		restClient.setConfiguration();
-//		restClient.getConfiguration();
-		
+		//		restClient.setConfiguration();
+		//		restClient.getConfiguration();
+
 		Message message = new Message();
 		message.setBody("Test message");
 		message.setTo("nicoerbs");
