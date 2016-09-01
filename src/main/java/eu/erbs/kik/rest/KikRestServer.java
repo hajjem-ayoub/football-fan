@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.erbs.kik.rest.model.BulkMessage;
 import eu.erbs.kik.rest.model.Message;
 
 @Path("/")
@@ -23,9 +24,10 @@ public class KikRestServer {
 	@POST
 	@Path("message")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response receiveMessages(Collection<Message> messages)
+	public Response receiveMessages(BulkMessage message)
 	{
-		logger.info("Received: " + messages.size() + " messages");
+//		logger.info("Received: " + messages);
+		logger.info("Received: " + message.getMessages().size() + " messages");
 		
 		return Response
 				.status(Status.OK).build();

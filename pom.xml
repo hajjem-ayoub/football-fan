@@ -6,14 +6,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Football Fan</name>
 	<properties>
-		<jersey.version>1.19</jersey.version>
+		<jersey.version>1.19.2</jersey.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>${jersey.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
@@ -22,6 +17,11 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-core</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
@@ -36,19 +36,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.owlike</groupId>
-			<artifactId>genson</artifactId>
-			<version>1.4</version>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-bundle</artifactId>
 			<version>${jersey.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.everrest</groupId>
-			<artifactId>everrest-websockets</artifactId>
-			<version>1.13.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

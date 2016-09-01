@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -33,7 +35,7 @@ public class KikRestClient {
 	private final static String KIK_CONFIGURATION_URL = "https://api.kik.com/v1/config";
 	private final static String KIK_MESSAGE_URL = "https://api.kik.com/v1/message";
 
-	private final static String WEBHOOK = "http://192.168.0.101:8080/FootballFan/kik/message";
+	private final static String WEBHOOK = "http://ec2-52-58-30-166.eu-central-1.compute.amazonaws.com:8080/football-fan-0.0.1-SNAPSHOT/kik/message";
 
 	private final static String KIK_BOT_USERNAME = "KIK_BOT_USERNAME";
 	private final static String KIK_BOT_API_KEY = "KIK_BOT_API_KEY";
@@ -52,7 +54,9 @@ public class KikRestClient {
 
 			ObjectMapper mapper = new ObjectMapper();
 			HttpPost request = new HttpPost(KIK_CONFIGURATION_URL);
-			request.setEntity(new StringEntity(mapper.writeValueAsString(botConfiguration)));
+			StringEntity entity = new StringEntity(mapper.writeValueAsString(botConfiguration));
+            entity.setContentType("application/json");
+			request.setEntity(entity);
 
 			getKikResponse(request);
 		} catch (IOException e) {
@@ -79,15 +83,27 @@ public class KikRestClient {
 
 	private HttpResponse getKikResponse(HttpPost request) throws KikException {
 		try {
-			Properties properties =new Properties();
+			Properties properties = new Properties();
 			properties.load(new FileReader(new File("src/main/resources/api.properties")));
 
-			request.addHeader(BasicScheme.authenticate(
-					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
-					"UTF-8", false));
-//						
+			Credentials credentials = new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY));
+			request.addHeader(BasicScheme.authenticate(credentials, "base64_encode", false));
+				
 			HttpClient httpClient = new DefaultHttpClient();
+			
 			HttpResponse response = httpClient.execute(request);
+			
+			StringBuffer buffer = new StringBuffer();
+			buffer.append(request.getMethod());
+			buffer.append("\n");
+			buffer.append(request.getURI().toString());
+			buffer.append("\n");
+			for(Header header : request.getAllHeaders()){
+				buffer.append(header.getName() + ":" + header.getValue());
+				buffer.append("\n");
+			}
+			buffer.append(EntityUtils.toString(request.getEntity()));
+			logger.debug(buffer.toString());
 
 			checkResponse(response);
 
@@ -105,7 +121,7 @@ public class KikRestClient {
 			request.addHeader(BasicScheme.authenticate(
 					new UsernamePasswordCredentials(properties.getProperty(KIK_BOT_USERNAME), properties.getProperty(KIK_BOT_API_KEY)),
 					"UTF-8", false));
-			
+
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpResponse response = httpClient.execute(request);
 
@@ -130,31 +146,52 @@ public class KikRestClient {
 			logger.info("Send " + messages.size() + " messages");
 
 			ObjectMapper mapper = new ObjectMapper();
-			HttpPost request = new HttpPost(WEBHOOK);
+			HttpPost request = new HttpPost(KIK_MESSAGE_URL);
 			logger.info("Messages: " + mapper.writeValueAsString(messages) + " to " + request.getURI());
 			StringEntity se = new StringEntity(mapper.writeValueAsString(messages));
-            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            request.setEntity(se);
-			
+			se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+			request.setEntity(se);
+
 			getKikResponse(request);
 		} catch (IOException e) {
 			throw new KikException(e);
 		}
 	}
+	
+	
+	public void sendMessageToWebhook(Collection<Message> messages) throws KikException
+	{
+		try {
+			logger.info("Send " + messages.size() + " messages");
+
+			ObjectMapper mapper = new ObjectMapper();
+			HttpPost request = new HttpPost(KIK_MESSAGE_URL);
+			logger.info("Messages: " + mapper.writeValueAsString(messages) + " to " + request.getURI());
+			StringEntity se = new StringEntity(mapper.writeValueAsString(messages));
+			se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+			request.setEntity(se);
+
+			getKikResponse(request);
+		} catch (IOException e) {
+			throw new KikException(e);
+		}
+	}
+	
+	
 
 	public static void main(String[] args) throws KikException {
 		KikRestClient restClient = new KikRestClient();
 
-				restClient.setConfiguration();
-				restClient.getConfiguration();
+//		restClient.setConfiguration();
+		restClient.getConfiguration();
 
-		Message message = new Message();
-		message.setBody("Test message");
-		message.setTo("nicoerbs");
-		message.setType("text");
-		message.setChatId("b3be3bc15dbe59931666c06290abd944aaa769bb2ecaaf859bfb65678880afab");
-		Collection<Message> messages = new ArrayList<>();
-		messages.add(message);
-		restClient.sendMessage(messages);
+//		Message message = new Message();
+//		message.setBody("Test message");
+//		message.setTo("nicoerbs");
+//		message.setType("text");
+//		message.setChatId("b3be3bc15dbe59931666c06290abd944aaa769bb2ecaaf859bfb65678880afab");
+//		Collection<Message> messages = new ArrayList<>();
+//		messages.add(message);
+//		restClient.sendMessage(messages);
 	}
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="403893c8-4578-484f-8c28-33c0d49652e0" activeEnvironment="Default" name="REST Project 1" resourceRoot="" soapui-version="5.2.1" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="8b784076-426f-42d5-9feb-548469f85dab" wadlVersion="http://wadl.dev.java.net/2009/02" name="https://api.kik.com" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>https://api.kik.com</con:endpoint></con:endpoints><con:resource name="Config" path="/football-fan-0.0.1-SNAPSHOT/kik/message" id="9522ab9e-2089-45ed-83b5-38b9147b029f"><con:settings/><con:parameters/><con:method name="Config" id="dd2b5aa0-a3e7-4861-b9d9-43c67ffdeec7" method="POST"><con:settings/><con:parameters/><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/x-www-form-urlencoded</con:mediaType><con:params/></con:representation><con:representation type="FAULT"><con:mediaType>text/html; charset=utf8</con:mediaType><con:status>415</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>400 403</con:status><con:params/><con:element xmlns:con1="https://api.kik.com/v1/config">con1:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:con1="https://api.kik.com/v1/config">con1:Response</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=utf-8</con:mediaType><con:status>500 404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>text/html;charset=UTF-8</con:mediaType><con:status>200</con:status><con:params/><con:element>html</con:element></con:representation><con:request name="message" id="590297a9-bdd9-491e-8248-7dcb614f434d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://api.kik.com</con:endpoint><con:request>{
+        "messages": [
+            {
+                "body": "bar", 
+                "to": "laura", 
+                "type": "text", 
+                "chatId": "b3be3bc15dbe59931666c06290abd944aaa769bb2ecaaf859bfb65678880afab"
+            }
+        ]
+    }</con:request><con:originalUri>https://api.kik.com/v1/config</con:originalUri><con:credentials><con:username>buliticker</con:username><con:password>749aa5a8-f2d8-4bce-b9d2-9beff65e8c52</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:preemptive>true</con:preemptive><con:authType>Preemptive</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request><con:request name="MessageToWebhook" id="62cce03a-4193-4160-891d-9f436f3db645" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://ec2-52-58-30-166.eu-central-1.compute.amazonaws.com:8080</con:endpoint><con:request>{
+    "messages": [
+        {
+            "chatId": "0ee6d46753bfa6ac2f089149959363f3f59ae62b10cba89cc426490ce38ea92d",
+            "id": "0115efde-e54b-43d5-873a-5fef7adc69fd",
+            "type": "text",
+            "from": "laura",
+            "participants": ["laura"],
+            "body": "omg r u real?",
+            "timestamp": 1439576628405,
+            "readReceiptRequested": true,
+            "mention": null
+        },
+        {
+            "chatId": "0ee6d46753bfa6ac2f089149959363f3f59ae62b10cba89cc426490ce38ea92d",
+            "id": "74ded818-1eb7-4266-91bc-c301c2f41fe3",
+            "type": "picture",
+            "from": "aleem",
+            "participants": ["aleem"],
+            "picUrl": "http://example.kik.com/apicture.jpg",
+            "timestamp": 1439576628405,
+            "readReceiptRequested": true,
+            "mention": null
+        }
+    ]
+}</con:request><con:originalUri>http://ec2-52-58-30-166.eu-central-1.compute.amazonaws.com/football-fan-0.0.1-SNAPSHOT/kik/message</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request><con:request name="MessageToLocalWebhook" id="62cce03a-4193-4160-891d-9f436f3db645" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://192.168.0.102:8080</con:endpoint><con:request>{
+    "messages": [
+        {
+            "chatId": "0ee6d46753bfa6ac2f089149959363f3f59ae62b10cba89cc426490ce38ea92d",
+            "id": "0115efde-e54b-43d5-873a-5fef7adc69fd",
+            "type": "text",
+            "from": "laura",
+            "participants": ["laura"],
+            "body": "omg r u real?",
+            "timestamp": 1439576628405,
+            "readReceiptRequested": true,
+            "mention": null
+        },
+        {
+            "chatId": "0ee6d46753bfa6ac2f089149959363f3f59ae62b10cba89cc426490ce38ea92d",
+            "id": "74ded818-1eb7-4266-91bc-c301c2f41fe3",
+            "type": "picture",
+            "from": "aleem",
+            "participants": ["aleem"],
+            "picUrl": "http://example.kik.com/apicture.jpg",
+            "timestamp": 1439576628405,
+            "readReceiptRequested": true,
+            "mention": null
+        }
+    ]
+}</con:request><con:originalUri>http://ec2-52-58-30-166.eu-central-1.compute.amazonaws.com/football-fan-0.0.1-SNAPSHOT/kik/message</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request><con:request name="StatusOfWebhook" id="62cce03a-4193-4160-891d-9f436f3db645" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://ec2-52-58-30-166.eu-central-1.compute.amazonaws.com:8080</con:endpoint><con:request>{
+    "messages": [
+        {
+            "chatId": "0ee6d46753bfa6ac2f089149959363f3f59ae62b10cba89cc426490ce38ea92d",
+            "id": "0115efde-e54b-43d5-873a-5fef7adc69fd",
+            "type": "text",
+            "from": "laura",
+            "participants": ["laura"],
+            "body": "omg r u real?",
+            "timestamp": 1439576628405,
+            "readReceiptRequested": true,
+            "mention": null
+        },
+        {
+            "chatId": "0ee6d46753bfa6ac2f089149959363f3f59ae62b10cba89cc426490ce38ea92d",
+            "id": "74ded818-1eb7-4266-91bc-c301c2f41fe3",
+            "type": "picture",
+            "from": "aleem",
+            "participants": ["aleem"],
+            "picUrl": "http://example.kik.com/apicture.jpg",
+            "timestamp": 1439576628405,
+            "readReceiptRequested": true,
+            "mention": null
+        }
+    ]
+}</con:request><con:originalUri>http://ec2-52-58-30-166.eu-central-1.compute.amazonaws.com/football-fan-0.0.1-SNAPSHOT/kik/message</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
